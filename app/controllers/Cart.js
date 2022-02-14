@@ -65,7 +65,7 @@ export const addToCart = async (req, res) => {
                     },
                 };
 
-                cartData = await Cart.updateOne({ _id: cart._id }, push);
+                // cartData = await Cart.updateOne({ _id: cart._id }, push);
 
             } else {
              
@@ -84,7 +84,7 @@ export const addToCart = async (req, res) => {
                         },
                     }
                 );
-                cartData = await Cart.findOne({ user: req.user._id });
+                // cartData = await Cart.findOne({ user: req.user._id });
             }
         } else {
             console.log(req.body)
@@ -107,6 +107,21 @@ export const addToCart = async (req, res) => {
             });
         }
       cartData =  await Cart.findOne({ user: req.user._id });
+      let totalPrice = cartData.cart_items.reduce((acc, curr) => {
+        return acc + curr.subtotal;
+        }, 0);
+        let totalTax = totalPrice * 0.1;
+        let totalDiscount = cartData.cart_items.reduce((acc, curr) => {
+            return acc + curr.discount;
+            }, 0);
+        let grandTotal = totalPrice + totalTax - totalDiscount;
+        cartData.total_items = cartData.cart_items.length;
+        cartData.total_price = totalPrice;
+        cartData.total_tax = totalTax;
+        cartData.discount = totalDiscount;
+        cartData.grand_total = grandTotal;
+        cartData.save();
+
         res.json(cartData);
     } catch (error) {
         console.log(error);
@@ -185,10 +200,6 @@ async function checkValidation(product_id, qty, user_id, cart,) {
      
 
         }
-
-     
-
-
     
      }
 
