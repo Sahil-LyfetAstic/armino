@@ -196,7 +196,7 @@ async function checkValidation(product_id, qty, user_id, cart,) {
      if(settings.discountPrice){
 
       console.log(Pro)
-      if(Pro.subtotal >= settings.limitPrice || Pro.subtotal + product.price * qty >= settings.limitPrice || product.price * qty >= settings.limitPrice){     
+      if(Pro?.subtotal >= settings.limitPrice || Pro?.subtotal + product.price * qty >= settings.limitPrice || product.price * qty >= settings.limitPrice){     
          discount =  settings.discountPrice
          console.log(discount, "discount of sanitizer")
       }
