@@ -41,6 +41,7 @@ const cartSchema = new mongoose.Schema({
         trim: true,
         default: 0,
     },
+ 
     scores: [],
     cart_items: [
         {
@@ -71,6 +72,11 @@ const cartSchema = new mongoose.Schema({
                 required: true,
                 trim: true,
                 default: 0,
+            },
+            discountApplied:{
+                type:String,
+                required:true,
+                default:false
             },
             grand_total: {
                 type: Number,
