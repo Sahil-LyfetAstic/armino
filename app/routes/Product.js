@@ -8,4 +8,5 @@ app.get("/products", authMiddleware, getProducts);
 
 
 
+
 export default app;
