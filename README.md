@@ -2,7 +2,7 @@
 
 
 TO INSTALL  npm install
-to start npm run script seeder && npm start
+to start npm run  seeder && npm start
 
 
 collection
