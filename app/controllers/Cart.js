@@ -44,7 +44,15 @@ export const addToCart = async (req, res) => {
             let productExist = cart.cart_items.find(
                 (i) => i.product_id == req.body.product_id
             );
+            let subtotal = product.price * req.body.qty
+            let  grandtotal = subtotal - validate.discount || subtotal - 0
+            console.log(subtotal,"subtotal")
+            console.log(validate.discount,"validate.discount")
+            console.log(grandtotal,"grandtotal")
+           
+            
             if (!productExist) {
+                console.log("working 1")
                 push = {
                     $push: {
                         cart_items: {
@@ -53,7 +61,7 @@ export const addToCart = async (req, res) => {
                             price:product.price,
                             discount:validate.discount,
                             subtotal: product.price * req.body.qty,
-                            grand_total:subtotal - discount
+                            grand_total: grandtotal
                         },
                     },
                 };
@@ -62,7 +70,7 @@ export const addToCart = async (req, res) => {
 
             } else {
              
-               
+               console.log("working 2")
                 await Cart.updateOne(
                     { _id: cart._id, "cart_items.product_id": req.body.product_id },
                     {
@@ -73,7 +81,7 @@ export const addToCart = async (req, res) => {
                         $set: {
                             "cart_items.$.discount": validate.discount,
                             "cart_items.$.subtotal": productExist.subtotal + product.price * req.body.qty,
-                            "cart_items.$.grand_total":productExist.subtotal + product.price * req.body.qty - validate.discount
+                            "cart_items.$.grand_total":productExist.subtotal + product.price * req.body.qty - validate.discount || productExist.subtotal + product.price * req.body.qty - 0
                         },
                     }
                 );
@@ -81,6 +89,7 @@ export const addToCart = async (req, res) => {
             }
         } else {
             console.log(req.body)
+            console.log("working 3")
             let subtotal = product.price * req.body.qty
             let  grandtotal = subtotal - validate.discount || subtotal - 0
             cartData = await Cart.create({
@@ -161,17 +170,6 @@ async function checkValidation(product_id, qty, user_id, cart,) {
         console.log("working    ")
 
         if(settings.discountPercentage){
-            // if(settings.upto <= product.price || settings.upto  <= Pro?.subtotal+ product.price){
-            //  let discount = product.price - (product.price * settings.discountPercentage / 100)
-            //     console.log(product.price , 'discount')
-            //     if(discount > settings.maxLimit){
-            //         discount = settings.maxLimit
-            //     }
-                
-            //     console.log(discount)
-              
-            //  }
-            console.log("working 2")
 
             if(Pro?.subtotal >= settings.upto || Pro?.subtotal + product.price * qty >= settings.upto || product.price * qty >= settings.upto){
                 console.log("eligible")
@@ -183,6 +181,12 @@ async function checkValidation(product_id, qty, user_id, cart,) {
             }
      
 
+        }
+
+        if(settings.discountAmount){
+
+            console.log("working on discoutn amout")
+            discount = 0
         }
 
         
