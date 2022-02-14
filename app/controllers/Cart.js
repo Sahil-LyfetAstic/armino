@@ -32,10 +32,9 @@ export const addToCart = async (req, res) => {
         console.log(validate.message)
         return res.json(validate);
     }
-    if(settings.maxLimit < validate.discount){
-        validate.discount = settings.maxLimit
-    }
 
+
+    console.log(validate.discount, "validate discount")
   
 
     try {
@@ -178,21 +177,29 @@ async function checkValidation(product_id, qty, user_id, cart,) {
                  if(discount > product.maxLimit){
                     discount = product.maxLimit
                  }
+
+                 if(settings.maxLimit < discount){
+                    discount = settings.maxLimit
+                }
             }
      
 
         }
 
-        if(settings.discountAmount){
+     
 
-            console.log("working on discoutn amout")
-            discount = 0
-        }
-
-        
-        console.log(discount)
 
     
+     }
+
+     console.log(settings)
+     if(settings.discountPrice){
+
+      console.log(Pro)
+      if(Pro.subtotal >= settings.limitPrice || Pro.subtotal + product.price * qty >= settings.limitPrice || product.price * qty >= settings.limitPrice){     
+         discount =  settings.discountPrice
+         console.log(discount, "discount of sanitizer")
+      }
      }
      
 
